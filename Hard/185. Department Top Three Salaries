@@ -1,0 +1,11 @@
+select 
+    d.name as Department,
+    e.name as Employee,
+    e.salary as Salary
+from (
+    select *,
+           dense_rank() over (partition by departmentId order by salary DESC) as salary_rank
+    from Employee
+) e
+left outer join Department d ON e.departmentId = d.id
+where e.salary_rank <= 3;
